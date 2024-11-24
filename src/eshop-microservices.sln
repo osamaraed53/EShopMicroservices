@@ -1,10 +1,39 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35506.116 d17.12
+VisualStudioVersion = 17.12.35506.116
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{E7795E7A-FDB7-4413-BD58-8D8A79AE4D3C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Catalog", "Catalog", "{7BCC9551-C54A-4FA3-9702-F2AA16C85725}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catalog.Api", "Services\Catalog\Catalog.Api\Catalog.Api.csproj", "{7DC7573D-D49E-4C16-BC31-1272ADF7AB2F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BuildingBlocks", "BuildingBlocks", "{5DDC59FE-E930-4D55-9A1E-F330D1A3E289}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildingBlocks", "BuildingBlocks\BuildingBlocks\BuildingBlocks.csproj", "{D4A88D04-FEB9-432C-AA29-2284C5532FA2}"
+EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7DC7573D-D49E-4C16-BC31-1272ADF7AB2F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7DC7573D-D49E-4C16-BC31-1272ADF7AB2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7DC7573D-D49E-4C16-BC31-1272ADF7AB2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7DC7573D-D49E-4C16-BC31-1272ADF7AB2F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4A88D04-FEB9-432C-AA29-2284C5532FA2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4A88D04-FEB9-432C-AA29-2284C5532FA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4A88D04-FEB9-432C-AA29-2284C5532FA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4A88D04-FEB9-432C-AA29-2284C5532FA2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{7BCC9551-C54A-4FA3-9702-F2AA16C85725} = {E7795E7A-FDB7-4413-BD58-8D8A79AE4D3C}
+		{7DC7573D-D49E-4C16-BC31-1272ADF7AB2F} = {7BCC9551-C54A-4FA3-9702-F2AA16C85725}
+		{D4A88D04-FEB9-432C-AA29-2284C5532FA2} = {5DDC59FE-E930-4D55-9A1E-F330D1A3E289}
 	EndGlobalSection
 EndGlobal
