@@ -27,19 +27,19 @@ public class UpdateProductCommandValidater
 }
 
 
-public class UpdateProductCommandHandler(IDocumentSession session , ILogger<UpdateProductCommandHandler> logger) : ICommandHandler<UpdateProductCommand, UpdateProductResult>
+public class UpdateProductCommandHandler(IDocumentSession session) 
+    : ICommandHandler<UpdateProductCommand, UpdateProductResult>
 {
     public async Task<UpdateProductResult> Handle(UpdateProductCommand command, CancellationToken cancellationToken)
     {
-
-        logger.LogInformation("UpdateProductCommandHandler.Handle called with {@command}", command);
-
         var product = await session.LoadAsync<Product>(command.Id, cancellationToken);
 
+#pragma warning disable IDE0270 // Use coalesce expression
         if (product is null)
         {
             throw new ProductNotFoundException(command.Id);
         }
+#pragma warning restore IDE0270 // Use coalesce expression
 
         product.Name = command.Name;
         product.Category = command.Category;

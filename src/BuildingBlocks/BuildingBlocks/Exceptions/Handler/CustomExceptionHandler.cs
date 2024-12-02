@@ -17,6 +17,7 @@ public class CustomExceptionHandler
             "Error Message {exceptionMessaage} , Time Of occurrence {time}",
             exception.Message, DateTime.UtcNow);
 
+#pragma warning disable IDE0042 // Deconstruct variable declaration
         (string Detail, string Title, int StatusCode) details = exception switch
         {
             InternalServerException =>
@@ -50,6 +51,7 @@ public class CustomExceptionHandler
                 context.Response.StatusCode = StatusCodes.Status500InternalServerError
             )
         };
+#pragma warning restore IDE0042 // Deconstruct variable declaration
 
         var problemDetails = new ProblemDetails
         {

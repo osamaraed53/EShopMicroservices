@@ -23,13 +23,11 @@ public class CreateProductCommandValidator  :
 }
 
 
-public class CreateProductCommandHandler(IDocumentSession session ,ILogger<CreateProductCommand> logger)
+public class CreateProductCommandHandler(IDocumentSession session )
     : ICommandHandler<CreateProductCommand, CreateProductResult>
 {
     public async Task<CreateProductResult> Handle(CreateProductCommand command, CancellationToken cancellationToken)
     {
-        logger.LogInformation("CreateProductCommand.Handle called with {@command}", command);
-
 
         // nested of this I am use MediateR Pipline Bhaviours 
         //var result = await validator.ValidateAsync(command, cancellationToken);

@@ -1,5 +1,7 @@
 
 using BuildingBlocks.Exceptions.Handler;
+using Catalog.Api.Data;
+using HealthChecks.UI.Client;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +19,8 @@ builder.Services.AddMediatR(config =>
 
     //Adding Pipeline Behavior: The line config.AddOpenBehavior(typeof(ValidationBehavior<,>)); registers the ValidationBehavior<TRequest, TResponse> as a pipeline behavior for MediatR. Pipeline behaviors allow you to introduce additional processing logic (like validation, logging, etc.) before and after the main request handler is executed. By using AddOpenBehavior, it enables the specified behavior for any request and response types handled by MediatR, making it flexible and reusable.
     config.AddOpenBehavior(typeof(ValidationBehavior<,>));
+
+    config.AddOpenBehavior(typeof(LoggingBehavior<,>));
 });
 
 // is used to register all the validators defined in the specified assembly, typically the assembly where your main application code resides.
@@ -24,12 +28,24 @@ builder.Services.AddValidatorsFromAssembly(assembly);
 
 builder.Services.AddCarter();
 
+var databaseConnectionString = builder.Configuration
+    .GetConnectionString("Database")!;
+
 builder.Services.AddMarten(options =>
 {
-    options.Connection(builder.Configuration.GetConnectionString("Database")!);
-});
+    options.Connection(databaseConnectionString);
+}).UseLightweightSessions();
+
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.InitializeMartenWith<CatalogInitialData>();
+}
+
 
 builder.Services.AddExceptionHandler<CustomExceptionHandler>();
+
+builder.Services.AddHealthChecks()
+    .AddNpgSql(databaseConnectionString);
 
 var app = builder.Build();
 
@@ -45,39 +61,44 @@ if (app.Environment.IsDevelopment())
 app.MapCarter();
 
 // the empty option indicates that we are relying on custom configured handler
-app.UseExceptionHandler(option => { });
+app.UseExceptionHandler(option => {});
+
+app.UseHealthChecks("/health",new Microsoft.AspNetCore.Diagnostics.HealthChecks.HealthCheckOptions
+{
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+});
 
 //Exception handler lambda 
-//app.UseExceptionHandler(exceptionHandlerApp =>
-//{
+/* app.UseExceptionHandler(exceptionHandlerApp =>
+{
 
-//    exceptionHandlerApp.Run(async context =>
-//    {
-//        var exception = context.Features.Get<IExceptionHandlerFeature>()?.Error;
+    exceptionHandlerApp.Run(async context =>
+    {
+        var exception = context.Features.Get<IExceptionHandlerFeature>()?.Error;
 
-//        if (exception is null)
-//        {
-//            return;
-//        }
-//        var problemDetails = new ProblemDetails()
-//        {
-//            Title = exception.Message,
-//            Status = StatusCodes.Status500InternalServerError,
-//            Detail = exception.StackTrace,
-//        };
+        if (exception is null)
+        {
+            return;
+        }
+        var problemDetails = new ProblemDetails()
+        {
+            Title = exception.Message,
+            Status = StatusCodes.Status500InternalServerError,
+            Detail = exception.StackTrace,
+        };
 
-//        var logger  = context.RequestServices.GetRequiredService<ILogger<Program>>();
-//        logger.LogError(exception, message: exception.Message);
+        var logger = context.RequestServices.GetRequiredService<ILogger<Program>>();
+        logger.LogError(exception, message: exception.Message);
 
-//        context.Response.StatusCode = StatusCodes.Status500InternalServerError;
-//        context.Response.ContentType = "application/program+json";
+        context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+        context.Response.ContentType = "application/program+json";
 
-//        await context.Response.WriteAsJsonAsync(problemDetails);
-
-
-//    });
+        await context.Response.WriteAsJsonAsync(problemDetails);
 
 
-//});
+    });
+
+
+}); */
 
 app.Run();
