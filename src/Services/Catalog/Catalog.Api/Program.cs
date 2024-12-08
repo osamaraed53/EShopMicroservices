@@ -4,8 +4,9 @@ using Catalog.Api.Data;
 using HealthChecks.UI.Client;
 
 var builder = WebApplication.CreateBuilder(args);
-
 // add services to the container 
+
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -48,8 +49,6 @@ builder.Services.AddHealthChecks()
     .AddNpgSql(databaseConnectionString);
 
 var app = builder.Build();
-
-
 //Config the HTTP request pipeline
 
 if (app.Environment.IsDevelopment())

@@ -1,0 +1,50 @@
+
+//file uses Protocol Buffers version 3
+syntax = "proto3";
+
+
+//Sets the namespace for the generated C# code. When this .proto file is compiled into C# classes, the classes will be placed in the Discount.Grpc namespace.
+option csharp_namespace = "Discount.Grpc";
+
+
+//Defines the package name for the .proto file. This is typically used to avoid naming conflicts in large projects.
+//In gRPC, the package name also helps organize generated code
+package discount;
+
+
+// the Discount service definition
+service DiscountProtoService {
+	// Discount Crud Operations 	
+	//rpc: Defines a remote procedure call method.
+	rpc GetDiscount (GetDiscountRequest) returns (CouponModel);
+	rpc CreateDicount (CreateDiscountRequest) returns (CouponModel);
+	rpc UpdateDiscount (UpdateDiscountRequest) returns (CouponModel);
+	rpc DeleteDiscount (DeleteDiscountRequest) returns (DeleteDiscountResponse);
+}
+
+message GetDiscountRequest{
+	string productName = 1;
+}
+
+message CouponModel{
+	int32 id = 1;
+	string productName = 2;
+	string description = 3;
+	int32 amount = 4;
+}
+
+message CreateDiscountRequest{
+	CouponModel Coupon = 1;
+}
+
+message UpdateDiscountRequest {
+	CouponModel Coupon = 1;
+}
+
+message DeleteDiscountRequest {
+	string productName = 1 ; 
+}
+
+message DeleteDiscountResponse{
+   bool	success = 1;
+}
